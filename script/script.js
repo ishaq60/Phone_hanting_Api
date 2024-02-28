@@ -40,7 +40,7 @@ phones =phones.slice(0,10)
     <h2 class="card-title">${phone.phone_name}</h2>
     <p>If a dog chews shoes whose shoes does he choose?</p>
     <div class="card-actions justify-center">
-    <button onclick="handaleshowDealtls('${phone.slug}')" class="btn btn-primary">Show Details</button>
+    <button onclick="handaleshowDealtls('${phone.slug}');show_deatls_modal.showModal()"  class="btn btn-primary">Show Details</button>
 </div>
 </div>
     
@@ -55,9 +55,27 @@ toggleloadingSpinner(false);
 // load single phone data
 const handaleshowDealtls = async(id)=>{
     console.log('show deatls',id);
-    const res=await fetch(`https://openapi.programming-hero.com/api/phone/ ${id}`)
-    const data=await res.json()
-    console.log(data);
+    const res=await fetch(`https://openapi.programming-hero.com/api/phone/${id}`)
+    const data= await res.json()
+    const phone= data.data;
+    // 
+    phoneDeatlis(phone)
+}
+const phoneDeatlis= (phone) =>{
+    console.log(phone);
+const phoneName=document.getElementById('phone_name')
+phoneName.innerText=phone.name
+
+const showDatailContainer =document.getElementById('show-dealtails-container')
+showDatailContainer.innerHTML=`
+<img src="${phone.image}" alt="">
+<p><span>Storage:${phone?.mainFeatures?.storage}</span></p>
+<p>Memory:${phone?.mainFeatures?.memory}</p>
+
+`
+
+// show the modal
+show_deatls_modal.showModal()
 }
 
 //handale search 
@@ -86,7 +104,6 @@ const toggleloadingSpinner=(isloading)=>{
         loadingspinner.classList.add('hidden')
     }
 }
-// handaleshow all
-const handaleshowAll=()=>{
-    handelSearch()
+const handaleShowALL=()=>{
+    handelSearch(true);
 }
